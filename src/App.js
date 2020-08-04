@@ -8,7 +8,7 @@ function App() {
 	const url = `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_API_KEY.substring(
 		1,
 		process.env.REACT_APP_API_KEY.length - 1
-	)}&s=${submitSearch}`;
+	)}${submitSearch}`;
 
 	useEffect(
 		() => {
@@ -26,7 +26,7 @@ function App() {
 
 	const submit = (e) => {
 		e.preventDefault();
-		setSubmitSearch(search);
+		setSubmitSearch(`&s=${search}`);
 	};
 
 	return (
