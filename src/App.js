@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
+	const apiUrl = `https://api.themoviedb.org/3/trending/all/day?api_key=${process.env
+		.REACT_APP_API_KEY}&sort_by=popularity.asc`;
+
 	const [ search, setSearch ] = useState('');
-	const [ submitSearch, setSubmitSearch ] = useState('');
-	const [ data, setData ] = useState([]);
-	const url = `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_API_KEY.substring(
-		1,
-		process.env.REACT_APP_API_KEY.length - 1
-	)}${submitSearch}`;
+	const [ data, setData ] = useState(null);
+	const [ url, setUrl ] = useState(apiUrl);
+
+	const imageUrl = `https://image.tmdb.org/t/p/w200`;
 
 	useEffect(
 		() => {
 			fetch(url)
 				.then((res) => res.json())
-				.then((data) => setData(data.Search))
+				.then((data) => setData(data.results))
 				.catch((err) => console.log(err.message));
 		},
 		[ url ]
@@ -26,7 +27,7 @@ function App() {
 
 	const submit = (e) => {
 		e.preventDefault();
-		setSubmitSearch(`&s=${search}`);
+		setUrl(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&query=${search}`);
 	};
 
 	return (
@@ -41,22 +42,24 @@ function App() {
 					value={search}
 					onChange={(e) => handleChange(e)}
 				/>
-				{data ? (
+			</form>
+			<div className="container">
+				{data === null ? (
+					<div> Loading... </div>
+				) : (
 					data.map(
 						(movie) =>
-							movie.Poster !== 'N/A' ? (
-								<div key={movie.imdbID}>
-									<img src={movie.Poster} alt="" />
-									<div>{movie.Title}</div>
+							movie.poster_path !== null ? (
+								<div key={movie.id}>
+									<img src={`${imageUrl}${movie.poster_path}`} alt="" />
+									<div>{movie.original_title}</div>
 								</div>
 							) : (
 								''
 							)
 					)
-				) : (
-					''
 				)}
-			</form>
+			</div>
 		</div>
 	);
 }
