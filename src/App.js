@@ -5,7 +5,7 @@ function App() {
 	const [ search, setSearch ] = useState('');
 	const [ submitSearch, setSubmitSearch ] = useState('');
 	const [ data, setData ] = useState([]);
-	const url = `http://www.omdbapi.com/?&apikey=${process.env.REACT_APP_API_KEY.substring(
+	const url = `https://www.omdbapi.com/?&apikey=${process.env.REACT_APP_API_KEY.substring(
 		1,
 		process.env.REACT_APP_API_KEY.length - 1
 	)}&s=${submitSearch}`;
